@@ -1,0 +1,81 @@
+.contact-me-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .grid {
+    display: grid;
+    gap: 20px;
+  }
+  
+  .info-card {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .info-card .icon {
+    font-size: 2rem;
+    color: #ff6600;
+    margin-bottom: 10px;
+  }
+  
+  .info-card p {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  .info-card span {
+    display: block;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .form-container {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 30px;
+    margin-top: 20px;
+  }
+  
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  textarea {
+    resize: vertical;
+  }
+  
+  .submit-button {
+    background-color: #ff6600;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .submit-button:hover {
+    background-color: #e55b00;
+  }
+  
