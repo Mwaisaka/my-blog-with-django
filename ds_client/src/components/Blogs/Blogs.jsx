@@ -7,34 +7,36 @@ function Blogs() {
   const [commentsVisible, setCommentsVisible] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
 
-  const toggleReadMore = (index) => {
+  const toggleReadMore = (id) => {
     setExpandedPosts((prev) => ({
       ...prev,
-      [index]: !prev[index],
+      [id]: !prev[id],
     }));
   };
 
-  const toggleComments = (index) => {
+  const toggleComments = (id) => {
     setCommentsVisible((prev) => ({
       ...prev,
-      [index]: !prev[index],
+      [id]: !prev[id],
     }));
   };
 
-  const handleLike = (index) => {
-    setPosts((prevPosts) => {
-      const updatedPosts = [...prevPosts];
-      updatedPosts[index].likes += 1; // Increment likes of the correct post
-      return updatedPosts;
-    });
+  const handleLike = (id) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === id ? { ...post, likes: post.likes + 1 } : post
+      )
+    );
   };
 
-  const handleAddComment = (index, comment) => {
-    setPosts((prevPosts) => {
-      const updatedPosts = [...prevPosts];
-      updatedPosts[index].comments.push(comment); // Add comment to the correct post
-      return updatedPosts;
-    });
+  const handleAddComment = (id, comment) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === id
+          ? { ...post, comments: [...post.comments, comment] }
+          : post
+      )
+    );
   };
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -86,16 +88,14 @@ function Blogs() {
         </div>
         <div className="grid grid-cols-4">
           <div className="col-span-4 bg-gray-100 p-6 rounded-lg shadow-lg">
-            {currentPosts.map((post, index) => {
-              // Map the index of the full posts array (not currentPosts)
-              const globalIndex = filteredPosts.indexOf(post);
-              const isExpanded = expandedPosts[globalIndex];
+            {currentPosts.map((post) => {
+              const isExpanded = expandedPosts[post.id];
               const shouldTruncate = post.content.length > 250;
-              const areCommentsVisible = commentsVisible[globalIndex];
+              const areCommentsVisible = commentsVisible[post.id];
 
               return (
                 <div
-                  key={globalIndex}
+                  key={post.id}
                   className="rounded overflow-hidden shadow-lg p-4 bg-white mb-8"
                 >
                   <h3 className="text-xl font-semibold">{post.title}</h3>
@@ -108,7 +108,7 @@ function Blogs() {
                   {shouldTruncate && (
                     <button
                       className="text-blue-600 mt-2 underline"
-                      onClick={() => toggleReadMore(globalIndex)}
+                      onClick={() => toggleReadMore(post.id)}
                     >
                       {isExpanded ? "Read Less" : "Read More"}
                     </button>
@@ -120,7 +120,7 @@ function Blogs() {
                   <div className="mt-4 flex items-center">
                     <button
                       className="bg-blue-500 text-white px-3 py-1 rounded-md mr-2"
-                      onClick={() => handleLike(globalIndex)}
+                      onClick={() => handleLike(post.id)}
                     >
                       Like
                     </button>
@@ -131,7 +131,7 @@ function Blogs() {
                   <div className="mt-4">
                     <button
                       className="bg-gray-500 text-white px-3 py-1 rounded-md"
-                      onClick={() => toggleComments(globalIndex)}
+                      onClick={() => toggleComments(post.id)}
                     >
                       {areCommentsVisible
                         ? `Hide Comments (${post.comments.length})`
@@ -164,7 +164,7 @@ function Blogs() {
                           const commentInput = e.target.elements.comment;
                           const comment = commentInput.value.trim();
                           if (comment) {
-                            handleAddComment(globalIndex, comment);
+                            handleAddComment(post.id, comment);
                             commentInput.value = "";
                           }
                         }}
