@@ -1,6 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
+import blogs from "./blogs.json";
 
 function AddPosts() {
+  // Local state for posts
+  const [posts, setPosts] = useState(blogs.posts);
+
+  // Form inputs state
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [readingTime, setReadingTime] = useState("");
+
+  console.log("Posts", posts);
+  // Handle form submit
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!title || !content || !readingTime) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    // Create a new post
+    const newPost = {
+      title,
+      content,
+      date: new Date().toISOString().split("T")[0], // Set current date
+      reading_time: readingTime,
+      likes: 0,
+      comments: [],
+    };
+
+    // Add new post to the posts array
+    setPosts((prevPosts) => {
+      return [...prevPosts, newPost];
+    });
+
+    alert('New post added successfully');
+    console.log('New post', newPost);
+
+    // Optionally, you can clear the form
+    setTitle("");
+    setContent("");
+    setReadingTime("");
+  };
+
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div className="w-full max-w-3xl bg-gray-200 shadow-lg rounded-lg p-6 sm:p-8 lg:p-10">
@@ -12,7 +55,7 @@ function AddPosts() {
             Fill out the form below to share your blog with the world.
           </p>
         </div>
-        <form>
+        <form onSubmit={handleSubmit}>
           {/* Title Input */}
           <div className="mb-4">
             <label
@@ -26,6 +69,8 @@ function AddPosts() {
               id="title"
               placeholder="Enter the title of your blog"
               className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
           </div>
 
@@ -42,6 +87,8 @@ function AddPosts() {
               rows="5"
               placeholder="Write your blog content here..."
               className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
             ></textarea>
           </div>
 
@@ -58,6 +105,8 @@ function AddPosts() {
               id="readingTime"
               placeholder="Estimated reading time (e.g., 5 mins)"
               className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={readingTime}
+              onChange={(e) => setReadingTime(e.target.value)}
             />
           </div>
 

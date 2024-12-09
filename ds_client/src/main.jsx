@@ -11,7 +11,7 @@ import Blogs from "./components/Blogs/Blogs.jsx";
 import About from "./components/Admin/Admin.jsx";
 import Contact from "./components/Contacts/ContactMe.jsx";
 import Weather from "./components/Weather/Weather.jsx";
-import AddPost from "./components/Blogs/AddBlog.jsx";
+import AddBlog from "./components/Blogs/AddBlog.jsx";
 import React from "react";
 import "./index.css";
 import Home from "./components/Home/Home.jsx";
@@ -25,7 +25,7 @@ function Main() {
        <Route path="/admin" element={<About />} />
        <Route path="/contact" element={<Contact />} />
        <Route path="/weather" element={<Weather />} />
-       <Route path="/addblog" element={<AddPost />} />
+       <Route path="/addblog" element={<AddBlog />} />
        <Route path="*" element={<div>Not Found</div>} />
     </Route>)
   );

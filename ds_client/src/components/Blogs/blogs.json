@@ -1,0 +1,49 @@
+{
+"posts": [
+    {
+      "title": "Javascript 001",
+      "content":
+        "JavaScript is the world's most popular lightweight, interpreted programming language. It is also known as a scripting language for web pages. JavaScript is widely used for the development of web pages, and many non-browser environments also use it. JavaScript can be used for client-side as well as server-side development.",
+      "date": "2015-01-01",
+      "reading_time": "5 mins",
+      "likes": 0,
+      "comments": []
+    },
+    {
+      "title": "Algorithm",
+      "content":
+        "Algorithms are step-by-step instructions for solving problems or completing tasks. They are a fundamental concept in computer science and are used to develop efficient and effective solutions. This makes them crucial for understanding complex computational challenges and finding optimal solutions.",
+      "date": "2014-01-01",
+      "reading_time": "3 mins",
+      "likes": 0,
+      "comments": []
+    },
+    {
+      "title": "Python",
+      "content":
+        "Python is a high-level programming language known for its simplicity and readability. It is widely used for web development, data analysis, artificial intelligence, and more.",
+      "date": "2013-01-01",
+      "reading_time": "4 mins",
+      "likes": 0,
+      "comments": []
+    },
+    {
+      "title": "HTML",
+      "content":
+        "HTML (HyperText Markup Language) is the standard language for creating web pages. It provides the structure of a webpage and is used alongside CSS and JavaScript.",
+      "date": "2012-01-01",
+      "reading_time": "1 min",
+      "likes": 0,
+      "comments": []
+    },
+    {
+        "title": "HTML 5",
+        "content":
+          "HTML (HyperText Markup Language) is the standard language for creating web pages. It provides the structure of a webpage and is used alongside CSS and JavaScript.",
+        "date": "2012-01-01",
+        "reading_time": "1 min",
+        "likes": 0,
+        "comments": []
+      }
+]
+}
