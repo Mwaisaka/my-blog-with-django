@@ -2,6 +2,7 @@
 "posts": [
     {
       "title": "Javascript 001",
+      "category": "Technology",
       "content":
         "JavaScript is the world's most popular lightweight, interpreted programming language. It is also known as a scripting language for web pages. JavaScript is widely used for the development of web pages, and many non-browser environments also use it. JavaScript can be used for client-side as well as server-side development.",
       "date": "2015-01-01",
@@ -11,6 +12,7 @@
     },
     {
       "title": "Algorithm",
+      "category": "Technology",
       "content":
         "Algorithms are step-by-step instructions for solving problems or completing tasks. They are a fundamental concept in computer science and are used to develop efficient and effective solutions. This makes them crucial for understanding complex computational challenges and finding optimal solutions.",
       "date": "2014-01-01",
@@ -20,6 +22,7 @@
     },
     {
       "title": "Python",
+      "category": "Technology",
       "content":
         "Python is a high-level programming language known for its simplicity and readability. It is widely used for web development, data analysis, artificial intelligence, and more.",
       "date": "2013-01-01",
@@ -29,6 +32,7 @@
     },
     {
       "title": "HTML",
+      "category": "Technology",
       "content":
         "HTML (HyperText Markup Language) is the standard language for creating web pages. It provides the structure of a webpage and is used alongside CSS and JavaScript.",
       "date": "2012-01-01",
@@ -37,9 +41,10 @@
       "comments": []
     },
     {
-        "title": "HTML 5",
+        "title": "Money saving Tips",
+        "category": "Finance",
         "content":
-          "HTML (HyperText Markup Language) is the standard language for creating web pages. It provides the structure of a webpage and is used alongside CSS and JavaScript.",
+          "The first step to start saving money is figuring out how much you spend. Keep track of all your expenses—that means every coffee, household item and cash tip, as well as regular monthly bills. Record your expenses however is easiest for you—a simple spreadsheet, free online spending tracker or app, or even pencil and paper. Once you have your data, organize the numbers by categories, such as gas, groceries and mortgage, and total each amount. Use your credit card and bank statements to make sure you’ve included everything.",
         "date": "2012-01-01",
         "reading_time": "1 min",
         "likes": 0,

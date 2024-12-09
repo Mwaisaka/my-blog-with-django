@@ -97,6 +97,7 @@ function Blogs() {
                   className="rounded overflow-hidden shadow-lg p-4 bg-white mb-8"
                 >
                   <h3 className="text-xl font-semibold">{post.title}</h3>
+                  <h3 className="text-m font-normal">{post.category}</h3>
                   <p className="text-gray-700 mt-2">
                     {shouldTruncate && !isExpanded
                       ? `${post.content.slice(0, 250)}...`

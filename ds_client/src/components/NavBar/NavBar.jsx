@@ -32,7 +32,7 @@ function NavBar() {
               </NavLink>
             </li>
             
-            <li>
+            {/* <li>
               <NavLink
                 to="/weather"
                 className={({ isActive }) =>
@@ -43,7 +43,7 @@ function NavBar() {
               >
                 Weather
               </NavLink>
-            </li>
+            </li> */}
             <li>
               <NavLink
                 to="/contact"

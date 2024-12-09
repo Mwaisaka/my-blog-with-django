@@ -4,9 +4,10 @@ import blogs from "./blogs.json";
 function AddPosts() {
   // Local state for posts
   const [posts, setPosts] = useState(blogs.posts);
-
+  
   // Form inputs state
   const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
   const [content, setContent] = useState("");
   const [readingTime, setReadingTime] = useState("");
 
@@ -15,14 +16,31 @@ function AddPosts() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!title || !content || !readingTime) {
-      alert("Please fill in all fields");
+    // Check each field and alert accordingly
+    if (!title) {
+      alert("Please fill in the Title field.");
+      return;
+    }
+
+    if (!category) {
+      alert("Please select a Category.");
+      return;
+    }
+
+    if (!content) {
+      alert("Please fill in the Content field.");
+      return;
+    }
+
+    if (!readingTime) {
+      alert("Please fill in the Reading Time field.");
       return;
     }
 
     // Create a new post
     const newPost = {
       title,
+      category,
       content,
       date: new Date().toISOString().split("T")[0], // Set current date
       reading_time: readingTime,
@@ -35,11 +53,12 @@ function AddPosts() {
       return [...prevPosts, newPost];
     });
 
-    alert('New post added successfully');
-    console.log('New post', newPost);
+    alert("New post added successfully");
+    console.log("New post", newPost);
 
     // Optionally, you can clear the form
     setTitle("");
+    setCategory("");
     setContent("");
     setReadingTime("");
   };
@@ -72,6 +91,27 @@ function AddPosts() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
+          </div>
+
+          {/* Category Input */}
+          <div className="mb-4">
+            <label
+              htmlFor="category"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Category
+            </label>
+            <select
+              id="category"
+              value={category} // Bind category value to state
+              onChange={(e) => setCategory(e.target.value)} // Update category state on change
+              className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Select</option>
+              <option value="technology">Technology</option>
+              <option value="finance">Finance</option>
+              <option value="Travel">Travel</option>
+            </select>
           </div>
 
           {/* Content Input */}
