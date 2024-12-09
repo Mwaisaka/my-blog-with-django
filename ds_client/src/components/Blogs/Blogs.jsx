@@ -24,7 +24,7 @@ function Blogs() {
   const handleLike = (index) => {
     setPosts((prevPosts) => {
       const updatedPosts = [...prevPosts];
-      updatedPosts[index].likes += 1;
+      updatedPosts[index].likes += 1; // Increment likes of the correct post
       return updatedPosts;
     });
   };
@@ -32,7 +32,7 @@ function Blogs() {
   const handleAddComment = (index, comment) => {
     setPosts((prevPosts) => {
       const updatedPosts = [...prevPosts];
-      updatedPosts[index].comments.push(comment);
+      updatedPosts[index].comments.push(comment); // Add comment to the correct post
       return updatedPosts;
     });
   };
@@ -87,13 +87,15 @@ function Blogs() {
         <div className="grid grid-cols-4">
           <div className="col-span-4 bg-gray-100 p-6 rounded-lg shadow-lg">
             {currentPosts.map((post, index) => {
-              const isExpanded = expandedPosts[index];
+              // Map the index of the full posts array (not currentPosts)
+              const globalIndex = filteredPosts.indexOf(post);
+              const isExpanded = expandedPosts[globalIndex];
               const shouldTruncate = post.content.length > 250;
-              const areCommentsVisible = commentsVisible[index];
+              const areCommentsVisible = commentsVisible[globalIndex];
 
               return (
                 <div
-                  key={index}
+                  key={globalIndex}
                   className="rounded overflow-hidden shadow-lg p-4 bg-white mb-8"
                 >
                   <h3 className="text-xl font-semibold">{post.title}</h3>
@@ -106,7 +108,7 @@ function Blogs() {
                   {shouldTruncate && (
                     <button
                       className="text-blue-600 mt-2 underline"
-                      onClick={() => toggleReadMore(index)}
+                      onClick={() => toggleReadMore(globalIndex)}
                     >
                       {isExpanded ? "Read Less" : "Read More"}
                     </button>
@@ -118,7 +120,7 @@ function Blogs() {
                   <div className="mt-4 flex items-center">
                     <button
                       className="bg-blue-500 text-white px-3 py-1 rounded-md mr-2"
-                      onClick={() => handleLike(index)}
+                      onClick={() => handleLike(globalIndex)}
                     >
                       Like
                     </button>
@@ -129,7 +131,7 @@ function Blogs() {
                   <div className="mt-4">
                     <button
                       className="bg-gray-500 text-white px-3 py-1 rounded-md"
-                      onClick={() => toggleComments(index)}
+                      onClick={() => toggleComments(globalIndex)}
                     >
                       {areCommentsVisible
                         ? `Hide Comments (${post.comments.length})`
@@ -162,7 +164,7 @@ function Blogs() {
                           const commentInput = e.target.elements.comment;
                           const comment = commentInput.value.trim();
                           if (comment) {
-                            handleAddComment(index, comment);
+                            handleAddComment(globalIndex, comment);
                             commentInput.value = "";
                           }
                         }}

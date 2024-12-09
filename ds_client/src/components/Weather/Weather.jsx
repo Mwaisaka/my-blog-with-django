@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-// import weather_image1 from "./../Images/weather_image1.png";
 
 const Weather = () => {
   const [weatherData, setWeatherData] = useState([]);
-  const [city, setCity] = useState(""); //Default city
+  const [city, setCity] = useState(""); // Default city
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_KEY = "bd5e378503939ddaee76f12ad7a97608"; //Your API key
+  const API_KEY = "bd5e378503939ddaee76f12ad7a97608"; // Your API key
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -56,54 +55,47 @@ const Weather = () => {
   };
 
   return (
-    <div
-      className="mt-12 mb-8 flex justify-center items-center bg-gray-100"
-    //   style={{
-    //     backgroundImage: `url(${weather_image1})`,
-    //     backgroundSize: "cover",
-    //     backgroundPosition: "center",
-    //     height: "600px",
-    //   }}
-    >
-      <div className="flex flex-col items-center p-4 bg-blue-200 rounded-lg shadow-md w-96">
-        <h1 className="text-2xl font-bold mb-4">Weather Information</h1>
-        <input
-          type="text"
-          value={city}
-          placeholder="Enter city"
-          onChange={handleCityChange}
-          className="mb-4 p-2 border border-gray-300 rounded-lg w-full text-center"
-        />
-        {loading ? (
-          <p className="text-gray-700">Loading...</p>
-        ) : error ? (
-          <p className="text-red-500">{error}</p>
-        ) : weatherData ? (
-          <div className="text-center">
-            <h2 className="text-xl font-semibold">{weatherData.name}</h2>
-            <p className="flex justify-center items-center h-full">
+    <div className=" flex justify-center">
+      <div className="w-full max-w-2xl px-4 sm:px-8 lg:px-16 mt-12">
+        <div className="flex flex-col items-center p-6 bg-blue-200 rounded-lg shadow-md">
+          <h1 className="text-4xl font-bold mb-6 text-gray-800">
+            Weather Information
+          </h1>
+          <input
+            type="text"
+            value={city}
+            placeholder="Enter city"
+            onChange={handleCityChange}
+            className="mb-6 p-3 border border-gray-300 rounded-lg w-full text-center"
+          />
+          {loading ? (
+            <p className="text-gray-700">Loading...</p>
+          ) : error ? (
+            <p className="text-red-500">{error}</p>
+          ) : weatherData ? (
+            <div className="text-center">
+              <h2 className="text-2xl font-semibold">{weatherData.name}</h2>
               <img
-                className="block"
+                className="block mx-auto my-4"
                 src={`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
                 alt={weatherData.weather[0].description}
               />
+              <p>Temperature: {weatherData.main.temp}°C</p>
+              <p>Humidity: {weatherData.main.humidity}%</p>
+              <p>Wind Direction: {getWindDirection(weatherData.wind.deg)}</p>
+              <p>Wind Speed: {weatherData.wind.speed} m/s</p>
+              {weatherData.rain ? (
+                <p>Precipitation (last 1h): {weatherData.rain["1h"]} mm</p>
+              ) : (
+                <p>No precipitation data available</p>
+              )}
+            </div>
+          ) : (
+            <p className="text-gray-500">
+              Enter a city to get weather information.
             </p>
-            <p>Temperature: {weatherData.main.temp}°C </p>
-            <p>Humidity: {weatherData.main.humidity}%</p>
-            <p>Wind Direction: {getWindDirection(weatherData.wind.deg)}</p>
-            <p>Wind Speed: {weatherData.wind.speed} m/s</p>
-            {/* Check and display precipitation data if available */}
-            {weatherData.rain ? (
-              <p>Precipitation (last 1h): {weatherData.rain["1h"]} mm</p>
-            ) : (
-              <p>No precipitation data available</p>
-            )}
-          </div>
-        ) : (
-          <p className="text-gray-500">
-            Enter a city to get weather information.
-          </p>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
