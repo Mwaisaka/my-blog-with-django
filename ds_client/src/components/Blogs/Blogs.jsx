@@ -68,7 +68,7 @@ function Blogs() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center">
+    <div className="min-h-screen flex justify-center items-center mt-8">
       <div className="w-full max-w-5xl px-4 sm:px-8 lg:px-16">
         <div className="mb-4 text-center">
           <h2 className="text-3xl font-bold">Welcome to my blog</h2>
