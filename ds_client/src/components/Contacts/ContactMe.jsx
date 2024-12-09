@@ -44,13 +44,13 @@ function ContactMe() {
         </div>
         <div className="info-card">
           <FontAwesomeIcon icon={faPhone} className="icon" />
-          <p>+254 716-461951</p>
+          <p>+254 *********</p>
           <span>Monday - Friday, 7am - 5pm</span>
         </div>
         <div className="info-card">
           <FontAwesomeIcon icon={faEnvelope} className="icon" />
           <p>
-            <a href="mailto:frankkashere@gmail.com">frankkashere@gmail.com</a>
+            <a href="mailto:example@gmail.com">example@gmail.com</a>
           </p>
           <span>Contact me anytime!</span>
         </div>

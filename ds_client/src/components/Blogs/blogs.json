@@ -1,12 +1,24 @@
 {
 "posts": [
+
+  {
+    "id":5,
+    "title": "Money saving Tips",
+    "category": "Finance",
+    "content":
+      "The first step to start saving money is figuring out how much you spend. Keep track of all your expenses—that means every coffee, household item and cash tip, as well as regular monthly bills. Record your expenses however is easiest for you—a simple spreadsheet, free online spending tracker or app, or even pencil and paper. Once you have your data, organize the numbers by categories, such as gas, groceries and mortgage, and total each amount. Use your credit card and bank statements to make sure you’ve included everything.",
+    "date": "2012-01-01",
+    "reading_time": "1 min",
+    "likes": 0,
+    "comments": []
+  },
     {
       "id":1,
       "title": "Javascript 001",
       "category": "Technology",
       "content":
         "JavaScript is the world's most popular lightweight, interpreted programming language. It is also known as a scripting language for web pages. JavaScript is widely used for the development of web pages, and many non-browser environments also use it. JavaScript can be used for client-side as well as server-side development.",
-      "date": "2015-01-01",
+      "date": "2005-01-01",
       "reading_time": "5 mins",
       "likes": 0,
       "comments": []
@@ -39,21 +51,10 @@
       "category": "Technology",
       "content":
         "HTML (HyperText Markup Language) is the standard language for creating web pages. It provides the structure of a webpage and is used alongside CSS and JavaScript.",
-      "date": "2012-01-01",
+      "date": "2011-01-01",
       "reading_time": "1 min",
       "likes": 0,
       "comments": []
-    },
-    {
-        "id":5,
-        "title": "Money saving Tips",
-        "category": "Finance",
-        "content":
-          "The first step to start saving money is figuring out how much you spend. Keep track of all your expenses—that means every coffee, household item and cash tip, as well as regular monthly bills. Record your expenses however is easiest for you—a simple spreadsheet, free online spending tracker or app, or even pencil and paper. Once you have your data, organize the numbers by categories, such as gas, groceries and mortgage, and total each amount. Use your credit card and bank statements to make sure you’ve included everything.",
-        "date": "2012-01-01",
-        "reading_time": "1 min",
-        "likes": 0,
-        "comments": []
-      }
+    }
 ]
 }
