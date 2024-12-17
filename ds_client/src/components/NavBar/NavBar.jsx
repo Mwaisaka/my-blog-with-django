@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import SoftDev from "../../../public/SoftDev.jpg";
+import SoftDev from "../../assets/SoftDev.jpg";
 
 function NavBar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);

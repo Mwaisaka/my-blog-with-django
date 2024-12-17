@@ -61,5 +61,64 @@ def add_post(request):
 @api_view(['GET'])
 @csrf_exempt
 def posts(request):
-    posts = Post.objects.all().values()
-    return JsonResponse(list(posts), safe=False)
+    posts = Post.objects.all()
+    response_data = []
+    for post in posts:
+        response_data.append({
+            'id': post.id,
+            'title': post.title,
+            'category': post.category,
+            'content': post.content,
+            'create_date': post.create_date,
+            'reading_time': post.reading_time,
+            'likes': post.likes,
+            'comments': json.loads(post.comments) if post.comments else [],  # Ensure it's an array
+        })
+    return JsonResponse(response_data, safe=False)
+
+@api_view(['POST'])
+@csrf_exempt
+def add_comment(request):
+    if request.method == "POST":
+        try:
+                    
+            # Parse JSON data from the request body
+            data = json.loads(request.body)
+            post_id = data.get("post_id")  # Extract the ID of the post
+            new_comment = data.get("comment")  # Extract the new comment
+            
+            if not post_id or not new_comment:
+                return JsonResponse({'error': 'Post ID and comment are required'}, status=400)
+
+            # Fetch the existing post
+            post = Post.objects.filter(id=post_id).first()
+            if not post:
+                return JsonResponse({'error': 'Post not found'}, status=404)
+            
+            # Decode comments
+            comments_list = json.loads(post.comments) if post.comments else []
+
+            # Add the new comment
+            comments_list.append(new_comment)
+
+            # Update the post's comments
+            post.comments = json.dumps(comments_list)
+            post.save()
+
+            # Return the updated post details
+            return JsonResponse({
+                'id': post.id,
+                'title': post.title,
+                'category': post.category,
+                'content': post.content,
+                'comments': comments_list,
+                'likes': post.likes,
+                'reading_time': post.reading_time,
+            }, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'POST request required'}, status=405)
