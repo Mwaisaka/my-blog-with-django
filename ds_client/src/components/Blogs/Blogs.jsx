@@ -6,6 +6,7 @@ function Blogs() {
   const [commentsVisible, setCommentsVisible] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [likedPosts, setLikedPosts] = useState({});
   const postsPerPage = 3;
 
   // Date formatting function
@@ -29,14 +30,20 @@ function Blogs() {
         const response = await fetch("http://127.0.0.1:8000/posts/");
         const data = await response.json();
 
-        console.log("Posts fetched", data);
+        // console.log("Posts fetched", data);
         // Sort posts by date in descending order
         setPosts(data.sort((b, a) => new Date(a.create_date) - new Date(b.create_date)));
+
+         // Initialize likedPosts state
+         const initialLikes = {};
+         data.forEach((post) => {
+           initialLikes[post.id] = false; // Default: not liked
+         });
+         setLikedPosts(initialLikes);
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
     };
-
     fetchPosts();
   }, []);
 
@@ -55,9 +62,18 @@ function Blogs() {
   };
 
   const handleLike = (id) => {
+
+    setLikedPosts((prevLikedPosts) => ({
+      ...prevLikedPosts,
+      [id]: !prevLikedPosts[id],
+    }));
+
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
-        post.id === id ? { ...post, likes: post.likes + 1 } : post
+        post.id === id ? {
+           ...post, 
+           likes: likedPosts[id] ? post.likes - 1 : post.likes + 1,
+          } : post
       )
     );
   };
@@ -147,6 +163,7 @@ function Blogs() {
                 const isExpanded = expandedPosts[post.id];
                 const shouldTruncate = post.content.length > 250;
                 const areCommentsVisible = commentsVisible[post.id];
+                const isLiked = likedPosts[post.id];
 
                 return (
                   <div
@@ -176,10 +193,10 @@ function Blogs() {
                     </p>
                     <div className="mt-4 flex items-center">
                       <button
-                        className="bg-blue-500 text-white px-3 py-1 rounded-md mr-2"
+                        className={`px-3 py-1 rounded-md mr-2 ${isLiked ?"bg-red-500 text-white" :"bg-blue-500 text-white"}`}
                         onClick={() => handleLike(post.id)}
                       >
-                        Like
+                        {isLiked? "Unlike" : "Like"}
                       </button>
                       <span className="text-gray-700">{post.likes} likes</span>
                     </div>
