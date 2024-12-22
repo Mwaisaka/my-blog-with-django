@@ -122,3 +122,50 @@ def add_comment(request):
             return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
     else:
         return JsonResponse({'error': 'POST request required'}, status=405)
+@api_view(["POST"])
+@csrf_exempt
+def toggle_like(request):
+    if request.method =="POST":
+        try:
+            # Parse JSON data from the request
+            data=json.loads(request.body)
+            post_id=data.get('post_id') #Extarct the post id
+            
+            if not post_id:
+                return JsonResponse({'error': 'Post ID is required'}, status=400)
+            
+            # Fetch the post
+            post=Post.objects.filter(id=post_id).first()
+            
+            if not post:
+                return JsonResponse({'error': 'Post not found'}, status=404)
+            
+            # Toggle the like count
+            action=data.get('action',"").lower() #Get the action (like or unlike)
+            if action=='like':
+                post.likes += 1
+            elif action=='unlike':
+                post.likes =max(0,post.likes-1) #Ensure the likes dont get below zero
+            else:
+                return JsonResponse({"error":"Invalid action. Use 'like' or 'unlike"}, status=400)
+            
+            # Save post
+            post.save()
+            
+            # Return the updated post details
+            return JsonResponse({
+                'id': post.id,
+                'title': post.title,
+                'category': post.category,
+                'content': post.content,
+                'likes': post.likes,
+                'comments': json.loads(post.comments) if post.comments else [], #Ensure it is an array
+                'reading_time': post.reading_time,
+            }, status=200)
+            
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'POST request required'}, status=405)
