@@ -23,6 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-f_8y9z72(%c)crr4m#+o_5!1ta+*gw-5)9ah-03*o0)y&q(nu-'
 
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'SECRET_KEY')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 

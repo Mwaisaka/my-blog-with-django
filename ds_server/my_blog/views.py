@@ -10,7 +10,7 @@ from datetime import datetime
 
 @api_view(['GET'])
 def home(request):
-    return HttpResponse("Hello from Django!")
+    return HttpResponse("Welcome to my blog!")
 
 @api_view(['POST'])
 @csrf_exempt
