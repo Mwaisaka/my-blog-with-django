@@ -5,22 +5,24 @@ function Blogs() {
   const [expandedPosts, setExpandedPosts] = useState({});
   const [commentsVisible, setCommentsVisible] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(
+    parseInt(localStorage.getItem("currentPage"), 10) || 1 // Retrieve saved page or default to 1
+  );
   const [likedPosts, setLikedPosts] = useState({});
   const postsPerPage = 3;
 
   // Date formatting function
   const formatDate = (date) => {
     const options = {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
       hour12: true,
     };
-    return new Intl.DateTimeFormat('en-US', options).format(new Date(date));
+    return new Intl.DateTimeFormat("en-US", options).format(new Date(date));
   };
 
   useEffect(() => {
@@ -32,20 +34,27 @@ function Blogs() {
 
         // console.log("Posts fetched", data);
         // Sort posts by date in descending order
-        setPosts(data.sort((b, a) => new Date(a.create_date) - new Date(b.create_date)));
+        setPosts(
+          data.sort((b, a) => new Date(a.create_date) - new Date(b.create_date))
+        );
 
-         // Initialize likedPosts state
-         const initialLikes = {};
-         data.forEach((post) => {
-           initialLikes[post.id] = false; // Default: not liked
-         });
-         setLikedPosts(initialLikes);
+        // Initialize likedPosts state
+        const initialLikes = {};
+        data.forEach((post) => {
+          initialLikes[post.id] = false; // Default: not liked
+        });
+        setLikedPosts(initialLikes);
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
     };
     fetchPosts();
   }, []);
+
+  useEffect(() => {
+    // Save current page to localStorage whenever it changes
+    localStorage.setItem("currentPage", currentPage);
+  }, [currentPage]);
 
   const toggleReadMore = (id) => {
     setExpandedPosts((prev) => ({
@@ -61,32 +70,46 @@ function Blogs() {
     }));
   };
 
-  const handleLike = (id) => {
-
-    setLikedPosts((prevLikedPosts) => ({
-      ...prevLikedPosts,
-      [id]: !prevLikedPosts[id],
-    }));
-
-    setPosts((prevPosts) =>
-      prevPosts.map((post) =>
-        post.id === id ? {
-           ...post, 
-           likes: likedPosts[id] ? post.likes - 1 : post.likes + 1,
-          } : post
-      )
-    );
+  const handleLike = async (id) => {
+    try {
+      // Determine the action based on the current state
+      const action = likedPosts[id] ? "unlike" : "like";
+  
+      // Send a request to the backend to toggle like/unlike
+      const response = await fetch("http://127.0.0.1:8000/posts/toggle_like/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          post_id: id,
+          action: action,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Failed to ${action} post: ${response.statusText}`);
+      }
+  
+      // Update the post's like count based on the response
+      const data = await response.json();
+  
+      // Update the UI state
+      setLikedPosts((prevLikedPosts) => ({
+        ...prevLikedPosts,
+        [id]: !prevLikedPosts[id],
+      }));
+  
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.id === id ? { ...post, likes: data.likes } : post
+        )
+      );
+    } catch (error) {
+      console.error(`Error toggling like for post ${id}:`, error);
+    }
   };
-
-  // const handleAddComment = (id, comment) => {
-  //   setPosts((prevPosts) =>
-  //     prevPosts.map((post) =>
-  //       post.id === id
-  //         ? { ...post, comments: [...post.comments, comment] }
-  //         : post
-  //     )
-  //   );
-  // };
+  
   const handleAddComment = async (postId, comment) => {
     try {
       const response = await fetch("http://127.0.0.1:8000/posts/add_comment/", {
@@ -99,15 +122,17 @@ function Blogs() {
           comment: comment,
         }),
       });
-  
+
       if (!response.ok) {
         throw new Error(`Failed to add comment: ${response.statusText}`);
       }
-  
+
       const updatedPost = await response.json();
       setPosts((prevPosts) =>
         prevPosts.map((post) =>
-          post.id === updatedPost.id ? { ...post, comments: updatedPost.comments } : post
+          post.id === updatedPost.id
+            ? { ...post, comments: updatedPost.comments }
+            : post
         )
       );
     } catch (error) {
@@ -193,10 +218,14 @@ function Blogs() {
                     </p>
                     <div className="mt-4 flex items-center">
                       <button
-                        className={`px-3 py-1 rounded-md mr-2 ${isLiked ?"bg-red-500 text-white" :"bg-blue-500 text-white"}`}
+                        className={`px-3 py-1 rounded-md mr-2 ${
+                          isLiked
+                            ? "bg-red-500 text-white"
+                            : "bg-blue-500 text-white"
+                        }`}
                         onClick={() => handleLike(post.id)}
                       >
-                        {isLiked? "Unlike" : "Like"}
+                        {isLiked ? "Unlike" : "Like"}
                       </button>
                       <span className="text-gray-700">{post.likes} likes</span>
                     </div>
@@ -214,7 +243,10 @@ function Blogs() {
                       <div className="mt-4">
                         <ul className="mb-2">
                           {post.comments.length > 0 ? (
-                            (Array.isArray(post.comments) ? post.comments : []).map((comment, idx) => (
+                            (Array.isArray(post.comments)
+                              ? post.comments
+                              : []
+                            ).map((comment, idx) => (
                               <li
                                 key={idx}
                                 className="text-gray-600 bg-gray-100 p-2 rounded mb-2"
@@ -229,7 +261,7 @@ function Blogs() {
                           )}
                         </ul>
                         <form
-                          onSubmit={async(e) => {
+                          onSubmit={async (e) => {
                             e.preventDefault();
                             const commentInput = e.target.elements.comment;
                             const comment = commentInput.value.trim();

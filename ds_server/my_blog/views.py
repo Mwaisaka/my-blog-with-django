@@ -155,12 +155,7 @@ def toggle_like(request):
             # Return the updated post details
             return JsonResponse({
                 'id': post.id,
-                'title': post.title,
-                'category': post.category,
-                'content': post.content,
                 'likes': post.likes,
-                'comments': json.loads(post.comments) if post.comments else [], #Ensure it is an array
-                'reading_time': post.reading_time,
             }, status=200)
             
         except json.JSONDecodeError:

@@ -27,12 +27,12 @@ import React from "react";
 export default function Footer() {
   return (
     <footer>
-      <div className="bg-gray-300 border-t border-gray-200 w-full py-4 mt-6">
-        <div className="px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
+      <div className="bg-gray-300 border-t border-gray-200 w-full py-3 px-4 mt-6">
+        <div className="px-4 sm:px-6 lg:px-14">
+          <div className="text-center px-8">
             <span className="font-base text-sm text-gray-700 sm:text-center">
               Copyright © 2024 
-              <a href="#" className="hover:underline mx-1">
+              <a href="#" className="hover:underline mx-4">
                 <strong>
                   <i>Frank Mwaisaka</i>
                 </strong>
