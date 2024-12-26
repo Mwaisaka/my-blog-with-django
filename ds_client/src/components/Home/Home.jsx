@@ -1,12 +1,12 @@
 import React from "react";
 import Subscribe from "../Subscribe/Subscribe";
-import Travel from "../../assets/Travel.png"
-import Finance from "../../assets/Finance.png"
-import Technology from "../../assets/Technology.png"
+import Travel from "../../assets/Travel.png";
+import Finance from "../../assets/Finance.png";
+import Technology from "../../assets/Technology.png";
 
 function Home() {
   return (
-    <div className="min-h-screen flex justify-center items-center -mb-10">
+    <div className="min-h-screen flex justify-center items-center -mb-10 mt-3">
       <div className="w-full max-w-5xl px-4 sm:px-8 lg:px-16">
         <div className="mb-8 text-center">
           <h2 className="text-4xl font-bold text-gray-800">
@@ -31,8 +31,11 @@ function Home() {
                 Personal Finance
               </h3>
               <p className="mt-2 text-gray-600">
-                Discover the wonders of nature, from serene landscapes to exotic
-                wildlife. Dive deep into the beauty of our planet.
+                Discover the essentials of personal finance, from budgeting and
+                saving to investing and retirement planning. Learn practical
+                tips to take control of your money, achieve financial goals, and
+                build a secure future. Take the first step toward financial
+                freedom today!
               </p>
               <a
                 href="#"

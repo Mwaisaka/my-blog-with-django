@@ -14,7 +14,7 @@
     display: inline-block;
     white-space: nowrap; /* Ensure the text does not wrap */
     animation: scroll-left 30s linear infinite; /* Scroll animation */
-    font-size: 1.2em; /* Adjust font size */
+    font-size: 1.0em; /* Adjust font size */
     color: #141414; /* Text color */
     font-style: italic;
 }

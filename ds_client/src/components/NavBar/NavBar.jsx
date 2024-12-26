@@ -113,7 +113,7 @@ function NavBar() {
                   Contact Me
                 </NavLink>
               </li>
-              <li>
+              {/* <li>
                 <NavLink
                   to="/addblog"
                   className={({ isActive }) =>
@@ -125,10 +125,10 @@ function NavBar() {
                 >
                   Add Blog
                 </NavLink>
-              </li>
+              </li> */}
               <li>
                 <NavLink
-                  to="/admin"
+                  to="/admin-login"
                   className={({ isActive }) =>
                     `hover:text-blue-500 ${
                       isActive ? "text-blue-700 font-bold" : "text-gray-700"
