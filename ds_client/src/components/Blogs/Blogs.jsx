@@ -10,6 +10,7 @@ function Blogs() {
   );
   const [likedPosts, setLikedPosts] = useState({});
   const postsPerPage = 3;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // Date formatting function
   const formatDate = (date) => {
@@ -29,7 +30,7 @@ function Blogs() {
     // Fetch posts from API
     const fetchPosts = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/posts/");
+        const response = await fetch(`${API_URL}/posts/`);
         const data = await response.json();
 
         // console.log("Posts fetched", data);
@@ -76,7 +77,7 @@ function Blogs() {
       const action = likedPosts[id] ? "unlike" : "like";
   
       // Send a request to the backend to toggle like/unlike
-      const response = await fetch("http://127.0.0.1:8000/posts/toggle_like/", {
+      const response = await fetch(`${API_URL}/posts/toggle_like/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -112,7 +113,7 @@ function Blogs() {
   
   const handleAddComment = async (postId, comment) => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/posts/add_comment/", {
+      const response = await fetch(`${API_URL}/posts/add_comment/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
