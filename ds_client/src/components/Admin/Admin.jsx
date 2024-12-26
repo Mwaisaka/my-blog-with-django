@@ -7,6 +7,7 @@ export default function AdminLoginForm({ onLogin, user }) {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL;
   // const [username, setUsername] = useState("");
   const [refreshPage, setRefreshPage] = useState(false);
   // Pass the useFormik() hook initial form values and a submit function that will
@@ -24,7 +25,7 @@ export default function AdminLoginForm({ onLogin, user }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    fetch("http://127.0.0.1:8000/login/", {
+    fetch(`${API_URL}/login/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
