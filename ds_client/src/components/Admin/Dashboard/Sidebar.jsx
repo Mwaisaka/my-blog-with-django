@@ -29,8 +29,17 @@ const Sidebar = ({ onLogout, onMenuItemClick }) => {
   }, []);
 
   function handleLogout() {
-    onLogout();
-    navigate("/");
+    // Ask the user for confirmation
+    const confirmLogout = window.confirm("Are you sure you want to log out?");
+
+    if (confirmLogout) {
+      // Proceed with logout
+      onLogout();
+      navigate("/");
+    } else {
+      // Do nothing and keep the user on the current page
+      return;
+    }
   }
 
   const handleClick = (menuItem) => {

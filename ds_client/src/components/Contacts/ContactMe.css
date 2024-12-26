@@ -1,5 +1,5 @@
 .contact-me-container {
-    max-width: 1200px;
+    max-width: 850px;
     margin: 0 auto;
     padding: 20px;
     box-sizing: border-box;
@@ -21,7 +21,7 @@
   
   .info-card .icon {
     font-size: 2rem;
-    color: #ff6600;
+    color: #433d7c;
     margin-bottom: 10px;
   }
   

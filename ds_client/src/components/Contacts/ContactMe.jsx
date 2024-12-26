@@ -16,7 +16,9 @@ function ContactMe() {
   const updateCharacterCount = () => {
     if (textareaRef.current && charCountRef.current) {
       const charCount = textareaRef.current.value.length;
-      charCountRef.current.textContent = `${maxLength - charCount} characters left.`;
+      charCountRef.current.textContent = `${
+        maxLength - charCount
+      } characters left.`;
     }
   };
 
@@ -36,7 +38,7 @@ function ContactMe() {
 
   return (
     <div className="contact-me-container">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-3">
         {/* Contact Info */}
         <div className="info-card">
           <FontAwesomeIcon icon={faHome} className="icon" />
@@ -108,7 +110,10 @@ function ContactMe() {
             ></textarea>
             <small ref={charCountRef}>{maxLength} characters left.</small>
           </div>
-          <button type="submit" className="submit-button">
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-300 ease-in-out"
+          >
             Send Message
           </button>
         </form>

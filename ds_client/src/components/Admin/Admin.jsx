@@ -137,7 +137,7 @@ export default function AdminLoginForm({ onLogin, user }) {
             <div className="button-group">
               <button
                 type="submit"
-                className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-300 ease-in-out"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-300 ease-in-out"
               >
                 Login
               </button>
