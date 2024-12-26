@@ -2,11 +2,12 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from .models import Post
+from .models import Post, BlogSubscriber
 import json
 from datetime import datetime
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -215,3 +216,54 @@ def login(request):
       return JsonResponse({"error":str(e)},status=500)
   else:
     return JsonResponse({"error":"Post request required"},status=405)
+
+@api_view(['POST'])
+@csrf_exempt
+def subscribe(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            email = data.get('email')
+            
+            existing_subscriber = BlogSubscriber.objects.filter(email=email).first()
+            
+            if not existing_subscriber:
+                # Create a new subscriber
+                new_subscriber = BlogSubscriber(email=email)
+                new_subscriber.save()
+                
+                # Get the current date and time
+                current_datetime = datetime.now()
+                
+                # Return the new subscriber as a JSON response
+                return JsonResponse(
+                    {
+                    "id": new_subscriber.id,
+                    "email": new_subscriber.email,
+                    'subscribe_date': current_datetime,
+                }, status=200)
+            else:
+                return JsonResponse({"error": "Email already exists"}, status=403)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
+    else:
+      return JsonResponse({'error': 'POST request required'}, status=405)
+
+@api_view(['GET'])
+@csrf_exempt
+def view_subscribers(request):
+    subscriber = BlogSubscriber.objects.all().values()
+    return JsonResponse(list(subscriber), safe=False)
+
+@api_view(['DELETE'])
+@csrf_exempt
+def delete_subscriber(request,id):
+    if request.method == 'DELETE':
+        try:
+            subscriber = get_object_or_404(BlogSubscriber, id=id)
+            subscriber.delete()
+            return JsonResponse({"message": "Subscriber deleted successfully"}, status=200)
+        except BlogSubscriber.DoesNotExist:
+            return JsonResponse({"error": "Subscriber does not exist"}, status=404)
+    else:
+        return JsonResponse({"erro": "Delete request required"}, status=405)

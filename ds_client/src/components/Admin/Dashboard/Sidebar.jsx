@@ -66,9 +66,12 @@ const Sidebar = ({ onLogout, onMenuItemClick }) => {
           <span>Dashboard Home</span>
         </div>
 
-        <div className="item">
+        <div
+          className={`item ${activeMenuItem === "SubscribersList" ? "active" : ""}`}
+          onClick={() => handleClick("SubscribersList")}
+        >
           <BiGroup className="icon" />
-          <Link to="/SubscribersList">List of Active Subscribers</Link>
+          <span>List of Active Subscribers</span>
         </div>
 
         <div

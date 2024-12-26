@@ -37,6 +37,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import DashboardHome from "./DashboardHome";
 import AddPosts from "../../Blogs/AddBlog";
+import SubscribersList from "./SubscribersList";
 
 const Card = ({ title }) => {
   const { path } = useParams(); // Get the current path
@@ -46,6 +47,8 @@ const Card = ({ title }) => {
         return <DashboardHome />;
     case "Add Blog":
       return <AddPosts />;
+    case "SubscribersList":
+      return <SubscribersList />;
     default:
       return null; // Return null if no matching menu item found
   }

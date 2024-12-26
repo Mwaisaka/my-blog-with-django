@@ -14,3 +14,9 @@ class Post(models.Model):
     def __str__(self):
         return f'{self.title} - {self.category} - {self.content} - {self.create_date.strftime("%Y-%m-%d %H:%M:%S")}'
 
+class BlogSubscriber(models.Model):
+    email = models.EmailField(max_length=255, unique=True)
+    subscribe_date = models.DateTimeField(null=False, blank=False, default=now)
+    
+    def __str__(self):
+        return f'{self.email} {self.subscribe_date.strftime("%Y-%m-%d")}'

@@ -8,6 +8,7 @@ function Subscribe() {
   const [subscribers, setSubscribers] = useState([]);
   const [error, setError] = useState(null);
   const [refreshPage, setRefreshPage] = useState(false);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -22,7 +23,7 @@ function Subscribe() {
 
     setIsSending(true);
 
-    fetch("http://127.0.0.1:8000/newsletter/", {
+    fetch(`${API_URL}/subscribe/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

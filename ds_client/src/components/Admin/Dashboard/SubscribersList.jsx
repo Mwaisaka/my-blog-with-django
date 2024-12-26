@@ -3,15 +3,20 @@ import { useEffect, useState } from "react";
 function SubscribersList() {
   const [subscribers, setSubscribers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchCategory, setSearchCategory] = useState("emailadress");
+  const [searchCategory, setSearchCategory] = useState("email");
   const [currentPage, setCurrentPage] = useState(1);
   const subscribersPerPage = 8;
   const [confirmDeleteIds, setConfirmDeleteIds] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5555/subscribers")
+    fetch(`${API_URL}/subscribers/`)
       .then((r) => r.json())
-      .then(setSubscribers);
+      .then((data) => {
+        console.log("API Response:", data);
+        setSubscribers(data);
+      })
+      .catch((error) => console.error("Error fetching subscribers:", error));
   }, []);
   
 
@@ -35,7 +40,7 @@ function SubscribersList() {
 
   const confirmDelete = async (id) => {
     try {
-      const response = await fetch(`http://127.0.0.1:5555/siteadmin/${id}`, {
+      const response = await fetch(`http://127.0.0.1:8000/subscribers/delete_subscriber/${id}`, {
         method: "DELETE",
       });
       if (response.ok) {
@@ -89,7 +94,7 @@ function SubscribersList() {
 
         <div style={{ textAlign: "center", marginBottom: "10px" }}>
           <select style={{ marginBottom: "10px" }} value={searchCategory} onChange={handleSelectChange}>
-            <option value="emailadress">Email</option>
+            <option value="email">Email</option>
           </select>
           <input style={{ marginBottom: "10px" }}
             type="text"
@@ -123,7 +128,7 @@ function SubscribersList() {
                   {subscriber.id}
                 </td>
                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  {subscriber.emailadress}
+                  {subscriber.email}
                 </td>
 
                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>
