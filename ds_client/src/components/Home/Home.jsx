@@ -1,5 +1,8 @@
 import React from "react";
 import Subscribe from "../Subscribe/Subscribe";
+import Travel from "../../assets/Travel.png"
+import Finance from "../../assets/Finance.png"
+import Technology from "../../assets/Technology.png"
 
 function Home() {
   return (
@@ -19,13 +22,13 @@ function Home() {
           {/* Blog Card 1 */}
           <div className="bg-white shadow-lg rounded-lg overflow-hidden">
             <img
-              src="https://via.placeholder.com/300x200"
+              src={Finance}
               alt="Nature"
               className="w-full h-48 object-cover"
             />
             <div className="p-4">
               <h3 className="text-xl font-semibold text-gray-800">
-                Exploring Nature
+                Personal Finance
               </h3>
               <p className="mt-2 text-gray-600">
                 Discover the wonders of nature, from serene landscapes to exotic
@@ -43,7 +46,7 @@ function Home() {
           {/* Blog Card 2 */}
           <div className="bg-white shadow-lg rounded-lg overflow-hidden">
             <img
-              src="https://via.placeholder.com/300x200"
+              src={Travel}
               alt="Travel"
               className="w-full h-48 object-cover"
             />
@@ -67,13 +70,13 @@ function Home() {
           {/* Blog Card 3 */}
           <div className="bg-white shadow-lg rounded-lg overflow-hidden">
             <img
-              src="https://via.placeholder.com/300x200"
+              src={Technology}
               alt="Science"
               className="w-full h-48 object-cover"
             />
             <div className="p-4">
               <h3 className="text-xl font-semibold text-gray-800">
-                Science and Innovation
+                Technology
               </h3>
               <p className="mt-2 text-gray-600">
                 Stay updated with the latest in science and technology. Explore
