@@ -40,7 +40,7 @@ function SubscribersList() {
 
   const confirmDelete = async (id) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/subscribers/delete_subscriber/${id}`, {
+      const response = await fetch(`${API_URL}/subscribers/delete_subscriber/${id}`, {
         method: "DELETE",
       });
       if (response.ok) {

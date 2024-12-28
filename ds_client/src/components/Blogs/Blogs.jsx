@@ -226,7 +226,7 @@ function Blogs() {
                         }`}
                         onClick={() => handleLike(post.id)}
                       >
-                        {isLiked ? "Unlike" : "Like"}
+                        {isLiked ? "Liked" : "Like"}
                       </button>
                       <span className="text-gray-700">{post.likes} likes</span>
                     </div>

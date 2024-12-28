@@ -1,39 +1,21 @@
 import React, { useState } from "react";
-import blogs from "./blogs.json";
 
 function AddPosts() {
-  // Local state for posts
-  const [posts, setPosts] = useState(blogs.posts);
-  
-  // Form inputs state
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [content, setContent] = useState("");
   const [readingTime, setReadingTime] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
+  const API_URL = import.meta.env.VITE_API_URL;
 
-  console.log("Posts", posts);
   // Handle form submit
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check each field and alert accordingly
-    if (!title) {
-      alert("Please fill in the Title field.");
-      return;
-    }
-
-    if (!category) {
-      alert("Please select a Category.");
-      return;
-    }
-
-    if (!content) {
-      alert("Please fill in the Content field.");
-      return;
-    }
-
-    if (!readingTime) {
-      alert("Please fill in the Reading Time field.");
+    if (!title || !category || !content || !readingTime) {
+      alert("All fields are required.");
       return;
     }
 
@@ -48,19 +30,42 @@ function AddPosts() {
       comments: [],
     };
 
-    // Add new post to the posts array
-    setPosts((prevPosts) => {
-      return [...prevPosts, newPost];
-    });
+    try {
+      setLoading(true);
+      setError(null);
+      setSuccessMessage("");
 
-    alert("New post added successfully");
-    console.log("New post", newPost);
+      const response = await fetch(`${API_URL}/posts/add_post/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newPost),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setSuccessMessage("Post added successfully"); // Update the success message
+        console.log("Added post:", data);
 
-    // Optionally, you can clear the form
-    setTitle("");
-    setCategory("");
-    setContent("");
-    setReadingTime("");
+        //Clear the form
+        setTitle("");
+        setCategory("");
+        setContent("");
+        setReadingTime("");
+        // Clear success message after 5 seconds
+        setTimeout(() => {
+          setSuccessMessage("");
+        }, 3000);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error || "Failed to add post");
+      }
+    } catch (err) {
+      console.error("Error adding post:", err.message);
+      setError("An unexpected error occurred.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -74,8 +79,8 @@ function AddPosts() {
             Fill out the form below to share your blog with the world.
           </p>
         </div>
+
         <form onSubmit={handleSubmit}>
-          {/* Title Input */}
           <div className="mb-4">
             <label
               htmlFor="title"
@@ -93,7 +98,6 @@ function AddPosts() {
             />
           </div>
 
-          {/* Category Input */}
           <div className="mb-4">
             <label
               htmlFor="category"
@@ -103,18 +107,17 @@ function AddPosts() {
             </label>
             <select
               id="category"
-              value={category} // Bind category value to state
-              onChange={(e) => setCategory(e.target.value)} // Update category state on change
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
               className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select</option>
-              <option value="technology">Technology</option>
-              <option value="finance">Finance</option>
+              <option value="Technology">Technology</option>
+              <option value="Finance">Finance</option>
               <option value="Travel">Travel</option>
             </select>
           </div>
 
-          {/* Content Input */}
           <div className="mb-4">
             <label
               htmlFor="content"
@@ -132,7 +135,6 @@ function AddPosts() {
             ></textarea>
           </div>
 
-          {/* Reading Time Input */}
           <div className="mb-4">
             <label
               htmlFor="readingTime"
@@ -150,15 +152,19 @@ function AddPosts() {
             />
           </div>
 
-          {/* Submit Button */}
           <div className="text-center">
             <button
               type="submit"
-              className="bg-blue-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="bg-blue-500 text-white font-bold py-2 px-6 mt-3 mb-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              disabled={loading}
             >
-              Publish Blog
+              {loading ? "Publishing..." : "Publish Blog"}
             </button>
           </div>
+          {error && <p className="text-red-600 text-center">{error}</p>}
+          {successMessage && (
+            <p className="text-green-600 text-center">{successMessage}</p>
+          )}
         </form>
       </div>
     </div>
