@@ -20,7 +20,7 @@ function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Blog Card 1 */}
-          <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+          <div className="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105">
             <img
               src={Finance}
               alt="Nature"
@@ -34,8 +34,7 @@ function Home() {
                 Discover the essentials of personal finance, from budgeting and
                 saving to investing and retirement planning. Learn practical
                 tips to take control of your money, achieve financial goals, and
-                build a secure future. Take the first step toward financial
-                freedom today!
+                build a secure future. 
               </p>
               <a
                 href="#"
@@ -47,7 +46,7 @@ function Home() {
           </div>
 
           {/* Blog Card 2 */}
-          <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+          <div className="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105">
             <img
               src={Travel}
               alt="Travel"
@@ -71,7 +70,7 @@ function Home() {
           </div>
 
           {/* Blog Card 3 */}
-          <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+          <div className="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 ease-in-out hover:scale-105">
             <img
               src={Technology}
               alt="Science"
