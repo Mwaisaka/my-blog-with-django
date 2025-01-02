@@ -126,7 +126,7 @@ function NavBar() {
                   Add Blog
                 </NavLink>
               </li> */}
-              <li>
+              {/* <li>
                 <NavLink
                   to="/manageblog"
                   className={({ isActive }) =>
@@ -138,7 +138,7 @@ function NavBar() {
                 >
                   Manage Blog
                 </NavLink>
-              </li>
+              </li> */}
               <li>
                 <NavLink
                   to="/admin-login"
