@@ -33,7 +33,7 @@ function Home() {
     },
   ];
   return (
-    <div className="min-h-screen flex justify-center items-center -mb-10 mt-3">
+    <div className="animate-swipeUp min-h-screen flex justify-center items-center -mb-10 mt-3">
       <div className="w-full max-w-5xl px-4 sm:px-8 lg:px-16">
         <div className="mb-8 text-center">
           <h2 className="text-4xl font-bold text-gray-800">

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const Weather = () => {
+function Weather(){
   const [weatherData, setWeatherData] = useState([]);
   const [city, setCity] = useState(""); // Default city
   const [loading, setLoading] = useState(true);
@@ -55,7 +55,7 @@ const Weather = () => {
   };
 
   return (
-    <div className=" flex justify-center">
+    <div className="animate-swipeUp flex justify-center">
       <div className="w-full max-w-2xl px-4 sm:px-8 lg:px-16 mt-12">
         <div className="flex flex-col items-center p-6 bg-blue-200 rounded-lg shadow-md">
           <h1 className="text-4xl font-bold mb-6 text-gray-800">

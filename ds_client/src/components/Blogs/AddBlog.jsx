@@ -69,7 +69,7 @@ function AddPosts() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center">
+    <div className="animate-swipeUp min-h-screen flex justify-center items-center">
       <div className="w-full max-w-3xl bg-gray-200 shadow-lg rounded-lg p-6 sm:p-8 lg:p-10">
         <div className="mb-6 text-center">
           <h2 className="text-3xl font-bold text-gray-800">
