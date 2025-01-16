@@ -267,3 +267,16 @@ def delete_subscriber(request,id):
             return JsonResponse({"error": "Subscriber does not exist"}, status=404)
     else:
         return JsonResponse({"erro": "Delete request required"}, status=405)
+
+@api_view(['DELETE'])
+@csrf_exempt
+def delete_post(request,id):
+    if request.method == 'DELETE':
+        try:
+            post = get_object_or_404(Post, id=id)
+            post.delete()
+            return JsonResponse({"message": "Post deleted successfully"}, status=200)
+        except Post.DoesNotExist:
+            return JsonResponse({"error": "Post does not exist"}, status=404)
+    else:
+        return JsonResponse({"erro": "Delete request required"}, status=405)

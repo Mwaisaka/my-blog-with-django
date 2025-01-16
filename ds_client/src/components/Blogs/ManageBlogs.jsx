@@ -9,6 +9,12 @@ function Blogs() {
     parseInt(localStorage.getItem("currentPage"), 10) || 1 // Retrieve saved page or default to 1
   );
   const [likedPosts, setLikedPosts] = useState({});
+  const [editingPostId, setEditingPostId] = useState(null);
+  const [editFormData, setEditFormData] = useState({
+    title: "",
+    category: "",
+    content: "",
+  });
   const postsPerPage = 3;
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -141,42 +147,64 @@ function Blogs() {
     }
   };
 
-  //Edit Blog
-  const handleEditBlog = async (id, updatedData) => {
-    try {
-      const response = await fetch(`${API_URL}/posts/${id}/`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedData),
-      });
-      if (!response.ok) {
-        throw new Error(`Failed to update blog post: ${response.statusText}`);
-      }
-
-      const updatedPost = await response.json();
-      setPosts((prevPosts) =>
-        prevPosts.map((post) => (post.id === id ? updatedPost : post))
-      );
-    } catch (error) {
-      console.error("Error updating blog post:", error);
-    }
-  };
-
   //Delete blog post
   const handleDeleteBlog = async (id) => {
     try {
-      const response = await fetch(`${API_URL}/posts/${id}/`, {
+      const response = await fetch(`${API_URL}/posts/delete_post/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) {
+        alert("Post not deleted!")
         throw new Error(`Failed to delete blog post: ${response.statusText}`);
       }
+      alert("Post deleted successfully!")
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
     } catch (error) {
       console.error("Error deleting blog post:", error);
     }
+  };
+
+  const handleEditClick = (post) => {
+    setEditingPostId(post.id);
+    setEditFormData({
+      title: post.title,
+      category: post.category,
+      content: post.content,
+    });
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleEditSave = async (id) => {
+    try {
+      const renspose = await fetch(`${API_URL}/posts/${id}/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editFormData),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update blog post: ${response.statusText");
+      }
+      const updatedPost = await response.json();
+      setPosts((prevPosts) =>
+        prevPosts.map((post) => (post.id === id ? updatedPost : post))
+      );
+      setEditingPostId(null);
+    } catch (error) {
+      console.error("Error updating blog post :", error);
+    }
+  };
+
+  const handleEditCancel = () => {
+    setEditingPostId(null);
   };
 
   //Delete blog comments
@@ -265,6 +293,50 @@ function Blogs() {
                     key={post.id}
                     className="rounded overflow-hidden shadow-lg p-4 bg-white mb-8"
                   >
+                    {editingPostId === post.id ? (
+                    <div>
+                      <input
+                        type="text"
+                        name="title"
+                        value={editFormData.title}
+                        onChange={handleEditChange}
+                        placeholder="Title"
+                        className="border border-gray-300 p-2 rounded w-full mb-2"
+                      />
+                      <input
+                        type="text"
+                        name="category"
+                        value={editFormData.category}
+                        onChange={handleEditChange}
+                        placeholder="Category"
+                        className="border border-gray-300 p-2 rounded w-full mb-2"
+                      />
+                      <textarea
+                        name="content"
+                        value={editFormData.content}
+                        onChange={handleEditChange}
+                        placeholder="Content"
+                        className="border border-gray-300 p-2 rounded w-full mb-2"
+                        rows="5"
+                      />
+                      <div className="flex space-x-2">
+                        <button
+                          className="bg-green-500 text-white px-3 py-1 rounded-md"
+                          onClick={() => handleEditSave(post.id)}
+                        >
+                          Save
+                        </button>
+                        <button
+                          className="bg-gray-500 text-white px-3 py-1 rounded-md"
+                          onClick={handleEditCancel}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) :
+                    (
+                    <>
                     <h3 className="text-xl font-semibold">{post.title}</h3>
                     <h3 className="text-m font-normal">{post.category}</h3>
                     <p className="text-gray-700 mt-2">
@@ -368,28 +440,7 @@ function Blogs() {
                     <div className="mt-4 flex space-x-2">
                       <button
                         className="bg-yellow-500 text-white px-3 py-1 rounded-md"
-                        onClick={() => {
-                          const newTitle = prompt(
-                            "Enter new title",
-                            post.title
-                          );
-                          const newCategory = prompt(
-                            "Enter new category",
-                            post.category
-                          );
-                          const newContent = prompt(
-                            "Enter new content",
-                            post.content
-                          );
-
-                          if (newTitle && newCategory && newContent) {
-                            handleEditBlog(post.id, {
-                              title: newTitle,
-                              category: newCategory,
-                              content: newContent,
-                            });
-                          }
-                        }}
+                        onClick={() => handleEditClick(post)}
                       >
                         Edit Blog
                       </button>
@@ -408,6 +459,8 @@ function Blogs() {
                         Delete Blog
                       </button>
                     </div>
+                    </>
+                  )}
                   </div>
                 );
               })
