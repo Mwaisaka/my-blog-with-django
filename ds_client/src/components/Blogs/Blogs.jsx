@@ -33,7 +33,7 @@ function Blogs() {
         const response = await fetch(`${API_URL}/posts/`);
         const data = await response.json();
 
-        // console.log("Posts fetched", data);
+        console.log("Posts fetched", data);
         // Sort posts by date in descending order
         setPosts(
           data.sort((b, a) => new Date(a.create_date) - new Date(b.create_date))
