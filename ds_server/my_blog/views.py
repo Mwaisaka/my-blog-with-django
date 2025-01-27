@@ -280,3 +280,116 @@ def delete_post(request,id):
             return JsonResponse({"error": "Post does not exist"}, status=404)
     else:
         return JsonResponse({"erro": "Delete request required"}, status=405)
+    
+@api_view(['POST'])
+@csrf_exempt
+def edit_post(request,id):
+    """
+    API to edit the title, category, content, and reading time of a post.
+    """
+    if request.method == "POST":
+        try:
+            # Pass the JSON payload
+            data=json.loads(request.body)
+            title=data.get("title")
+            category=data.get("category")
+            content=data.get("content")
+            reading_time=data.get("reading_time")
+            create_date=data.get("create_date")
+            
+            # Validate the input fields
+            if not any([title, category, content, reading_time]):
+                return JsonResponse(
+                    {"error": "At least one of 'title', 'category', 'content', or 'reading_time' is required to update the post."},
+                    status=400
+                )
+            
+            # Fetch the post by ID
+            post = get_object_or_404(Post, id=id)
+            
+            # Update the fields only if provided in the request
+            if title:
+                post.title = title
+            if category:
+                post.category = category
+            if content:
+                post.content = content
+            if reading_time:
+                post.reading_time = reading_time
+                
+            # Save changes
+            post.save()
+            
+            # Return the updated post details
+            return JsonResponse({
+                'id': post.id,
+                'title': post.title,
+                'category': post.category,
+                'content': post.content,
+                'create_date': post.create_date,
+                'reading_time': f"{post.reading_time}",
+                'likes': post.likes,
+                'comments': json.loads(post.comments) if post.comments else []
+            }, status=200)
+            
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'error': 'POST request required'}, status=405)
+    
+@api_view(['DELETE'])
+@csrf_exempt
+def delete_comment(request):
+    """ 
+    API to delete a specific comment from a post.
+    """
+    
+    if request.method == 'DELETE':
+        try:
+            #Parse the request body
+           
+            data=json.loads(request.body)
+            id=data.get('id')
+            print(f"Received request for post_id: {id}")
+            comment_to_delete=data.get('comments')
+            print(f"Comment to delete: {comment_to_delete}")
+            
+            if not comment_to_delete:
+                return JsonResponse({"error": "Comment content are required"}, status=400)
+            
+            #Fetch the post
+            post=get_object_or_404(Post,id=id)
+            print(f"Post fetched: {post}")
+            
+            #Decode the comments field
+            comments_list=json.loads(post.comments) if post.comments else [] 
+            print(f"Existing comments: {comments_list}")
+            print(f"Comment to delete: {comment_to_delete}")
+            
+            #Check if the comments exist
+            if comment_to_delete not in comments_list:
+                return JsonResponse({"error": "Comment not found"}, status=404)
+            
+            #Remove the comments
+            comments_list.remove(comment_to_delete)
+            print(f"Updated comments: {comments_list}")
+            
+            #Update and save the post
+            post.comments = json.dumps(comments_list)
+            post.save()
+            print(f"Post saved successfully")
+            
+            #Return the updated comments list
+            return JsonResponse({
+                "id": post.id,
+                "title": post.title,
+                "comments": comments_list,
+            }, status=200)            
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON Payload"}, status=400)
+        except Exception as e:
+            return JsonResponse({"error":f'An error occurred : {str(e)}'}, status=500)
+    else:
+        return JsonResponse({"error":"DELETE request is required"}, status=405)

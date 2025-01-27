@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function Blogs() {
+function ManageBlogs() {
   const [posts, setPosts] = useState([]);
   const [expandedPosts, setExpandedPosts] = useState({});
   const [commentsVisible, setCommentsVisible] = useState({});
@@ -14,12 +14,16 @@ function Blogs() {
     title: "",
     category: "",
     content: "",
+    reading_time: "",
   });
   const postsPerPage = 3;
   const API_URL = import.meta.env.VITE_API_URL;
 
   // Date formatting function
   const formatDate = (date) => {
+    if (!date || isNaN(new Date(date).getTime())) {
+      return "Invalid date"; // Handle invalid dates
+    }
     const options = {
       year: "numeric",
       month: "short",
@@ -149,18 +153,30 @@ function Blogs() {
 
   //Delete blog post
   const handleDeleteBlog = async (id) => {
-    try {
-      const response = await fetch(`${API_URL}/posts/delete_post/${id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        alert("Post not deleted!")
-        throw new Error(`Failed to delete blog post: ${response.statusText}`);
+    // Ask the user for confirmation
+    const confirmDeleteBlog = window.confirm(
+      "Are you sure you want to delete this post?"
+    );
+
+    if (confirmDeleteBlog) {
+      //Proceed to delete the post
+      try {
+        const response = await fetch(`${API_URL}/posts/delete_post/${id}`, {
+          method: "DELETE",
+        });
+        if (!response.ok) {
+          alert("Post not deleted!");
+          throw new Error(`Failed to delete blog post: ${response.statusText}`);
+        }
+        alert("Post deleted successfully!");
+        setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
+      } catch (error) {
+        console.error("Error deleting blog post:", error);
       }
-      alert("Post deleted successfully!")
-      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
-    } catch (error) {
-      console.error("Error deleting blog post:", error);
+    } else {
+      //Do noting and retain the post
+      alert("Post not deleted!");
+      return;
     }
   };
 
@@ -170,6 +186,7 @@ function Blogs() {
       title: post.title,
       category: post.category,
       content: post.content,
+      reading_time: post.reading_time,
     });
   };
 
@@ -183,7 +200,7 @@ function Blogs() {
 
   const handleEditSave = async (id) => {
     try {
-      const renspose = await fetch(`${API_URL}/posts/${id}/`, {
+      const response = await fetch(`${API_URL}/posts/edit_post/${id}/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -208,33 +225,45 @@ function Blogs() {
   };
 
   //Delete blog comments
-  const handleDeleteComment = async (postId, commentID) => {
-    try {
-      const response = await fetch(
-        `${API_URL}/posts/${postId}/delete_comment/`,
-        {
+  const handleDeleteComment = async (id, comment) => {
+    // Ask the user for confirmation
+    const confirmDeleteComment = window.confirm(
+      "Are you sure you want to delete this comment?"
+    );
+
+    if (confirmDeleteComment) {
+      // Proceed to delete the comment
+
+      try {
+        const response = await fetch(`${API_URL}/posts/delete_comment/`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ index: commentID }),
+          body: JSON.stringify({
+            id: id,
+            comments: comment,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to delete comment: ${response.statusText}`);
         }
-      );
 
-      if (!response.ok) {
-        throw new Error(`Failed to delete comment: ${response.statusText}`);
+        const updatedPost = await response.json();
+        setPosts((prevPosts) =>
+          prevPosts.map((post) =>
+            post.id === id ? { ...post, comments: updatedPost.comments } : post
+          )
+        );
+        alert("Comment deleted successfully!");
+      } catch (error) {
+        console.error("Error deleting comment:", error);
       }
-
-      const updatedPost = await response.json();
-      setPosts((prevPosts) =>
-        prevPosts.map((post) =>
-          post.id === postId
-            ? { ...post, comments: updatedPost.comments }
-            : post
-        )
-      );
-    } catch (error) {
-      console.error("Error deleting comment:", error);
+    } else {
+      // Do nothing and keep the comment
+      alert("Comment not deleted!");
+      return;
     }
   };
 
@@ -267,7 +296,7 @@ function Blogs() {
     <div className="animate-swipeUp min-h-screen flex justify-center items-center mt-8">
       <div className="w-full max-w-5xl px-4 sm:px-8 lg:px-16">
         <div className="mb-4 text-center">
-          <h2 className="text-3xl font-bold">My Blogs</h2>
+          <h2 className="text-3xl font-bold">Manage My Blogs</h2>
           <input
             type="text"
             placeholder="Search blogs by title or category..."
@@ -294,173 +323,178 @@ function Blogs() {
                     className="rounded overflow-hidden shadow-lg p-4 bg-white mb-8"
                   >
                     {editingPostId === post.id ? (
-                    <div>
-                      <input
-                        type="text"
-                        name="title"
-                        value={editFormData.title}
-                        onChange={handleEditChange}
-                        placeholder="Title"
-                        className="border border-gray-300 p-2 rounded w-full mb-2"
-                      />
-                      <input
-                        type="text"
-                        name="category"
-                        value={editFormData.category}
-                        onChange={handleEditChange}
-                        placeholder="Category"
-                        className="border border-gray-300 p-2 rounded w-full mb-2"
-                      />
-                      <textarea
-                        name="content"
-                        value={editFormData.content}
-                        onChange={handleEditChange}
-                        placeholder="Content"
-                        className="border border-gray-300 p-2 rounded w-full mb-2"
-                        rows="5"
-                      />
-                      <div className="flex space-x-2">
-                        <button
-                          className="bg-green-500 text-white px-3 py-1 rounded-md"
-                          onClick={() => handleEditSave(post.id)}
-                        >
-                          Save
-                        </button>
-                        <button
-                          className="bg-gray-500 text-white px-3 py-1 rounded-md"
-                          onClick={handleEditCancel}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  ) :
-                    (
-                    <>
-                    <h3 className="text-xl font-semibold">{post.title}</h3>
-                    <h3 className="text-m font-normal">{post.category}</h3>
-                    <p className="text-gray-700 mt-2">
-                      {shouldTruncate && !isExpanded
-                        ? `${post.content.slice(0, 250)}...`
-                        : post.content}
-                    </p>
-                    {shouldTruncate && (
-                      <button
-                        className="text-blue-600 mt-2 underline"
-                        onClick={() => toggleReadMore(post.id)}
-                      >
-                        {isExpanded ? "Read Less" : "Read More"}
-                      </button>
-                    )}
-                    <p className="text-gray-700 mt-2">
-                      Posted on: {formatDate(post.create_date)}
-                    </p>
-                    <p className="text-gray-700 mt-2">
-                      {post.reading_time} read
-                    </p>
-                    <div className="mt-4 flex items-center">
-                      <button
-                        className={`px-3 py-1 rounded-md mr-2 ${
-                          isLiked
-                            ? "bg-red-500 text-white"
-                            : "bg-blue-500 text-white"
-                        }`}
-                        onClick={() => handleLike(post.id)}
-                      >
-                        {isLiked ? "Liked" : "Like"}
-                      </button>
-                      <span className="text-gray-700">{post.likes} likes</span>
-                    </div>
-                    <div className="mt-4">
-                      <button
-                        className="bg-gray-500 text-white px-3 py-1 rounded-md"
-                        onClick={() => toggleComments(post.id)}
-                      >
-                        {areCommentsVisible
-                          ? `Hide Comments (${post.comments.length})`
-                          : `View Comments (${post.comments.length})`}
-                      </button>
-                    </div>
-                    {areCommentsVisible && (
-                      <div className="mt-4">
-                        <ul className="mb-2">
-                          {post.comments.length > 0 ? (
-                            (Array.isArray(post.comments)
-                              ? post.comments
-                              : []
-                            ).map((comment, idx) => (
-                              <li
-                                key={idx}
-                                className="text-gray-600 bg-gray-100 p-2 rounded mb-2 flex justify-between items-center"
-                              >
-                                {comment}
-                                <button
-                                  className="text-red-500 text-sm underline"
-                                  onClick={() =>
-                                    handleDeleteComment(post.id, idx)
-                                  }
-                                >
-                                  Delete
-                                </button>
-                              </li>
-                            ))
-                          ) : (
-                            <li className="text-gray-500 italic">
-                              No comments yet.
-                            </li>
-                          )}
-                        </ul>
-                        <form
-                          onSubmit={async (e) => {
-                            e.preventDefault();
-                            const commentInput = e.target.elements.comment;
-                            const comment = commentInput.value.trim();
-                            if (comment) {
-                              await handleAddComment(post.id, comment);
-                              commentInput.value = "";
-                            }
-                          }}
-                        >
-                          <input
-                            type="text"
-                            name="comment"
-                            placeholder="Write a comment..."
-                            className="border border-gray-300 p-2 rounded w-full mb-2"
-                          />
+                      <div>
+                        <input
+                          type="text"
+                          name="title"
+                          value={editFormData.title}
+                          onChange={handleEditChange}
+                          placeholder="Title"
+                          className="border border-gray-300 p-2 rounded w-full mb-2"
+                        />
+                        <input
+                          type="text"
+                          name="category"
+                          value={editFormData.category}
+                          onChange={handleEditChange}
+                          placeholder="Category"
+                          className="border border-gray-300 p-2 rounded w-full mb-2"
+                        />
+                        <textarea
+                          name="content"
+                          value={editFormData.content}
+                          onChange={handleEditChange}
+                          placeholder="Content"
+                          className="border border-gray-300 p-2 rounded w-full mb-2"
+                          rows="5"
+                        />
+                        <input
+                          type="number"
+                          name="reading_time"
+                          value={editFormData.reading_time}
+                          onChange={handleEditChange}
+                          placeholder="Reading Time"
+                          className="border border-gray-300 p-2 rounded w-full mb-2"
+                        />
+                        <div className="flex space-x-2">
                           <button
-                            type="submit"
                             className="bg-green-500 text-white px-3 py-1 rounded-md"
+                            onClick={() => handleEditSave(post.id)}
                           >
-                            Add Comment
+                            Save
                           </button>
-                        </form>
+                          <button
+                            className="bg-gray-500 text-white px-3 py-1 rounded-md"
+                            onClick={handleEditCancel}
+                          >
+                            Cancel
+                          </button>
+                        </div>
                       </div>
+                    ) : (
+                      <>
+                        <h3 className="text-xl font-semibold">{post.title}</h3>
+                        <h3 className="text-m font-normal">{post.category}</h3>
+                        <p className="text-gray-700 mt-2">
+                          {shouldTruncate && !isExpanded
+                            ? `${post.content.slice(0, 250)}...`
+                            : post.content}
+                        </p>
+                        {shouldTruncate && (
+                          <button
+                            className="text-blue-600 mt-2 underline"
+                            onClick={() => toggleReadMore(post.id)}
+                          >
+                            {isExpanded ? "Read Less" : "Read More"}
+                          </button>
+                        )}
+                        <p className="text-gray-700 mt-2">
+                          Posted on: {formatDate(post.create_date)}
+                        </p>
+                        <p className="text-gray-700 mt-2">
+                          {post.reading_time} Mins read
+                        </p>
+                        <div className="mt-4 flex items-center">
+                          <button
+                            className={`px-3 py-1 rounded-md mr-2 ${
+                              isLiked
+                                ? "bg-red-500 text-white"
+                                : "bg-blue-500 text-white"
+                            }`}
+                            onClick={() => handleLike(post.id)}
+                          >
+                            {isLiked ? "Liked" : "Like"}
+                          </button>
+                          <span className="text-gray-700">
+                            {post.likes} likes
+                          </span>
+                        </div>
+                        <div className="mt-4">
+                          <button
+                            className="bg-gray-500 text-white px-3 py-1 rounded-md"
+                            onClick={() => toggleComments(post.id)}
+                          >
+                            {areCommentsVisible
+                              ? `Hide Comments (${post.comments.length})`
+                              : `View Comments (${post.comments.length})`}
+                          </button>
+                        </div>
+                        {areCommentsVisible && (
+                          <div className="mt-4">
+                            <ul className="mb-2">
+                              {post.comments.length > 0 ? (
+                                (Array.isArray(post.comments)
+                                  ? post.comments
+                                  : []
+                                ).map((comment, idx) => (
+                                  <li
+                                    key={idx}
+                                    className="text-gray-600 bg-gray-100 p-2 rounded mb-2 flex justify-between items-center"
+                                  >
+                                    {comment}
+                                    <button
+                                      className="text-red-500 text-sm underline"
+                                      onClick={() =>
+                                        handleDeleteComment(post.id, comment)
+                                      }
+                                    >
+                                      Delete
+                                    </button>
+                                  </li>
+                                ))
+                              ) : (
+                                <li className="text-gray-500 italic">
+                                  No comments yet.
+                                </li>
+                              )}
+                            </ul>
+                            <form
+                              onSubmit={async (e) => {
+                                e.preventDefault();
+                                const commentInput = e.target.elements.comment;
+                                const comment = commentInput.value.trim();
+                                if (comment) {
+                                  await handleAddComment(post.id, comment);
+                                  commentInput.value = "";
+                                }
+                              }}
+                            >
+                              <input
+                                type="text"
+                                name="comment"
+                                placeholder="Write a comment..."
+                                className="border border-gray-300 p-2 rounded w-full mb-2"
+                              />
+                              <button
+                                type="submit"
+                                className="bg-green-500 text-white px-3 py-1 rounded-md"
+                              >
+                                Add Comment
+                              </button>
+                            </form>
+                          </div>
+                        )}
+                        {/*Edit and Delete a blog post */}
+                        <div className="mt-4 flex space-x-2">
+                          <button
+                            className="bg-yellow-500 text-white px-3 py-1 rounded-md"
+                            onClick={() => handleEditClick(post)}
+                          >
+                            Edit Blog
+                          </button>
+                          <button
+                            className="bg-red-500 text-white px-3 py-1 rounded-md"
+                            onClick={() => {
+                              {
+                                handleDeleteBlog(post.id);
+                              }
+                            }}
+                          >
+                            Delete Blog
+                          </button>
+                        </div>
+                      </>
                     )}
-                    {/*Edit and Delete a blog post */}
-                    <div className="mt-4 flex space-x-2">
-                      <button
-                        className="bg-yellow-500 text-white px-3 py-1 rounded-md"
-                        onClick={() => handleEditClick(post)}
-                      >
-                        Edit Blog
-                      </button>
-                      <button
-                        className="bg-red-500 text-white px-3 py-1 rounded-md"
-                        onClick={() => {
-                          if (
-                            confirm(
-                              "Are you sure you want to delete this blog post?"
-                            )
-                          ) {
-                            handleDeleteBlog(post.id);
-                          }
-                        }}
-                      >
-                        Delete Blog
-                      </button>
-                    </div>
-                    </>
-                  )}
                   </div>
                 );
               })
@@ -495,4 +529,4 @@ function Blogs() {
   );
 }
 
-export default Blogs;
+export default ManageBlogs;

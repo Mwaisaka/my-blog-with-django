@@ -67,7 +67,9 @@ const Sidebar = ({ onLogout, onMenuItemClick }) => {
         </div>
 
         <div
-          className={`item ${activeMenuItem === "SubscribersList" ? "active" : ""}`}
+          className={`item ${
+            activeMenuItem === "SubscribersList" ? "active" : ""
+          }`}
           onClick={() => handleClick("SubscribersList")}
         >
           <BiGroup className="icon" />
@@ -81,14 +83,15 @@ const Sidebar = ({ onLogout, onMenuItemClick }) => {
           <BiHome className="icon" />
           <span>Add a blog</span>
         </div>
-        <NavLink to="/addblog" className="item">
-          <BiTask className="icon" />
-          Edit a blog
-        </NavLink>
-        <NavLink to="/addblog" className="item">
-          <BiCut className="icon" />
-          Delete a blog
-        </NavLink>
+        <div
+          className={`item ${
+            activeMenuItem === "Manage a Blog" ? "active" : ""
+          }`}
+          onClick={() => handleClick("Manage a Blog")}
+        >
+          <BiHome className="icon" />
+          <span>Manage a blog</span>
+        </div>
 
         <a href="#" className="item">
           <BiHelpCircle className="icon" />

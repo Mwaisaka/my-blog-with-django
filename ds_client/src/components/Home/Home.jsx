@@ -13,22 +13,22 @@ function Home() {
       title: "Personal Finance",
       description:
         "Discover the essentials of personal finance, from budgeting and" +
-        "saving to investing and retirement planning. Learn practical" +
-        "tips to take control of your money, achieve financial goals, and" +
+        " saving to investing and retirement planning. Learn practical " +
+        "tips to take control of your money, achieve financial goals, and " +
         "build a secure future.",
     },
     {
       image: Travel,
       title: "Travel Adventures",
       description:
-        "Embark on journeys to incredible destinations. Get travel tips," +
+        "Embark on journeys to incredible destinations. Get travel tips, " +
         "guides, and inspiration for your next trip.",
     },
     {
       image: Technology,
       title: "Technology",
       description:
-        "Stay updated with the latest in science and technology. Explore" +
+        "Stay updated with the latest in science and technology. Explore " +
         "breakthroughs, discoveries, and innovations.",
     },
   ];

@@ -38,15 +38,18 @@ import { useParams } from "react-router-dom";
 import DashboardHome from "./DashboardHome";
 import AddPosts from "../../Blogs/AddBlog";
 import SubscribersList from "./SubscribersList";
+import ManageBlogs from "../../Blogs/ManageBlogs";
 
 const Card = ({ title }) => {
   const { path } = useParams(); // Get the current path
 
   switch (title) {
     case "Dashboard":
-        return <DashboardHome />;
+      return <DashboardHome />;
     case "Add Blog":
       return <AddPosts />;
+    case "Manage a Blog":
+      return <ManageBlogs />;
     case "SubscribersList":
       return <SubscribersList />;
     default:

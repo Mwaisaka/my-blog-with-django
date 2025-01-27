@@ -21,9 +21,9 @@ function Main() {
   const [user, setUser] = useState(null);
 
   function handleLogin(user) {
+    
     setUser(user);
   }
-
   function handleLogout() {
     setUser(null);
     console.log("User logged out successfully");
