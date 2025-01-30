@@ -20,3 +20,14 @@ class BlogSubscriber(models.Model):
     
     def __str__(self):
         return f'{self.email} {self.subscribe_date.strftime("%Y-%m-%d")}'
+
+class Message(models.Model):
+    name = models.CharField(max_length=255, null=False)
+    email = models.EmailField(max_length=255, unique=True)
+    phoneNumber = models.IntegerField(null=False)
+    subject = models.CharField(max_length=255, null=False)
+    message = models.TextField(null=False)  # TextField for larger content
+    create_date = models.DateTimeField(null=False, blank=True, default=now)
+    
+    def __str__(self):
+        return f'{self.name} - {self.email} - {self.phoneNumber} - {self.subject} - {self.message} -{self.create_date.strftime("%Y-%m-%d %H:%M:%S")}'

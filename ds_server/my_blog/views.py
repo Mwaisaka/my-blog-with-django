@@ -2,7 +2,7 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from .models import Post, BlogSubscriber
+from .models import Post, BlogSubscriber, Message
 import json
 from datetime import datetime
 from django.contrib.auth import authenticate
@@ -393,3 +393,65 @@ def delete_comment(request):
             return JsonResponse({"error":f'An error occurred : {str(e)}'}, status=500)
     else:
         return JsonResponse({"error":"DELETE request is required"}, status=405)
+
+
+@api_view(['GET'])
+@csrf_exempt
+def messages(request):
+    messages = Message.objects.all()
+    response_data = []
+    for message in messages:
+        response_data.append({
+            'id': message.id,
+            'name': message.name,
+            'email': message.email,
+            'phoneNumber': message.phoneNumber,
+            'subject': message.subject,
+            'message': message.message,
+            'create_date': message.create_date,
+        })
+    return JsonResponse(response_data, safe=False)
+
+
+@api_view(['POST'])
+@csrf_exempt
+def add_message(request):
+    if request.method == "POST":
+        try:
+            data=json.loads(request.body)# Parse JSON data from the request body
+            name=data.get("name") # Extract 'name' from the request payload
+            email=data.get("email") # Extract 'email' from the request payload
+            phone_Number=data.get("phoneNumber") # Extract 'phoneNumber' from the request payload
+            subject=data.get("subject") # Extract 'subject' from the request payload
+            message=data.get("message") # Extract 'name' from the request payload                   
+        
+            if message:            
+                # Check if the user has already submitted the same message
+                existing_message = Message.objects.filter(name=name, email=email, subject=subject, message=message).first()
+                
+                if not existing_message:               
+                    # Create a new message
+                    new_message = Message(name=name,email=email,phoneNumber=phone_Number, subject=subject, message=message)
+                    new_message.save()
+                    
+                    # Get the current date and time
+                    current_datetime = datetime.now()
+                    
+                    # Return the newly created message as JSON response
+                    return JsonResponse({
+                        'id': new_message.id,
+                        'name': new_message.name,
+                        'email': new_message.email,
+                        'phoneNumber': new_message.phoneNumber,
+                        'subject': new_message.subject,
+                        'message': new_message.message,
+                        'create_date': current_datetime,
+                    }, status=201)  
+                else:
+                    return JsonResponse({'error': 'Message with the same content already exists'}, status=403)         
+            else:
+                return JsonResponse({'error': 'Message content is required'}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
+    else:
+      return JsonResponse({'error': 'POST request required'}, status=405)
