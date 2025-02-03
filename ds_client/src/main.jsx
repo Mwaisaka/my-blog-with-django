@@ -16,6 +16,7 @@ import React, { useState } from "react";
 import "./index.css";
 import AdminLoginForm from "./components/Admin/Admin.jsx";
 import Dashboard from "./components/Admin/Dashboard/Dashboard.jsx";
+import Messages from "./components/Contacts/Messages.jsx";
 
 function Main() {
   const [user, setUser] = useState(null);
@@ -37,6 +38,7 @@ function Main() {
         <Route path="/weather" element={<Weather />} />
         <Route path="/addblog" element={<AddBlog />} />
         <Route path="/manageblog" element={<ManageBlogs />} />
+        <Route path="/messages" element={<Messages />} />
         <Route path="*" element={<div>Not Found</div>} />
         <Route
           path="/admin-login"

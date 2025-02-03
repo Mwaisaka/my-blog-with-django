@@ -141,6 +141,8 @@ function Blogs() {
     }
   };
 
+  console.log("Posts", posts);
+
   const filteredPosts = posts.filter(
     (post) =>
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -148,6 +150,8 @@ function Blogs() {
   );
 
   const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+
+
 
   const currentPosts = filteredPosts.slice(
     (currentPage - 1) * postsPerPage,

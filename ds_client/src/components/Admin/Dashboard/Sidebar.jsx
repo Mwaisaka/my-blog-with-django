@@ -80,17 +80,27 @@ const Sidebar = ({ onLogout, onMenuItemClick }) => {
           className={`item ${activeMenuItem === "Add Blog" ? "active" : ""}`}
           onClick={() => handleClick("Add Blog")}
         >
-          <BiHome className="icon" />
+          <BiTask className="icon" />
           <span>Add a blog</span>
         </div>
         <div
           className={`item ${
-            activeMenuItem === "Manage a Blog" ? "active" : ""
+            activeMenuItem === "Manage Blogs" ? "active" : ""
           }`}
-          onClick={() => handleClick("Manage a Blog")}
+          onClick={() => handleClick("Manage Blogs")}
         >
-          <BiHome className="icon" />
-          <span>Manage a blog</span>
+          <BiTask className="icon" />
+          <span>Manage Blogs</span>
+        </div>
+
+        <div
+          className={`item ${
+            activeMenuItem === "Manage Messages" ? "active" : ""
+          }`}
+          onClick={() => handleClick("Manage Messages")}
+        >
+          <BiTask className="icon" />
+          <span>Manage Messages</span>
         </div>
 
         <a href="#" className="item">

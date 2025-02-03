@@ -455,3 +455,16 @@ def add_message(request):
             return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
     else:
       return JsonResponse({'error': 'POST request required'}, status=405)
+
+@api_view(['DELETE'])
+@csrf_exempt
+def delete_message(request,id):
+    if request.method == 'DELETE':
+        try:
+            post = get_object_or_404(Message, id=id)
+            post.delete()
+            return JsonResponse({"message": "Message deleted successfully"}, status=200)
+        except Message.DoesNotExist:
+            return JsonResponse({"error": "Message does not exist"}, status=404)
+    else:
+        return JsonResponse({"erro": "Delete request required"}, status=405)

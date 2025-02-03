@@ -267,6 +267,7 @@ function ManageBlogs() {
     }
   };
 
+  
   const filteredPosts = posts.filter(
     (post) =>
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

@@ -39,6 +39,7 @@ import DashboardHome from "./DashboardHome";
 import AddPosts from "../../Blogs/AddBlog";
 import SubscribersList from "./SubscribersList";
 import ManageBlogs from "../../Blogs/ManageBlogs";
+import Messages from "../../Contacts/Messages";
 
 const Card = ({ title }) => {
   const { path } = useParams(); // Get the current path
@@ -48,8 +49,10 @@ const Card = ({ title }) => {
       return <DashboardHome />;
     case "Add Blog":
       return <AddPosts />;
-    case "Manage a Blog":
+    case "Manage Blogs":
       return <ManageBlogs />;
+    case "Manage Messages":
+      return <Messages />;
     case "SubscribersList":
       return <SubscribersList />;
     default:

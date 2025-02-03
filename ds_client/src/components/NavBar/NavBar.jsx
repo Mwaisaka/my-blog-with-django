@@ -139,6 +139,19 @@ function NavBar() {
                   Manage Blog
                 </NavLink>
               </li> */}
+              {/* <li>
+                <NavLink
+                  to="/messages"
+                  className={({ isActive }) =>
+                    `hover:text-blue-500 ${
+                      isActive ? "text-blue-700 font-bold" : "text-gray-700"
+                    }`
+                  }
+                  onClick={closeMobileMenu} // Close menu on link click
+                >
+                  Messages
+                </NavLink>
+              </li> */}
               <li>
                 <NavLink
                   to="/admin-login"
