@@ -3,11 +3,11 @@ import React from "react";
 import "./content.css";
 import Card from "./Card";
 
-const Content = ({title}) => {
+const Content = ({title, onLogin, user}) => {
   return (
-    <div className="content shadow-lg bg-gray-100">
+    <div className="content shadow-lg bg-gray-100 -mt-10">
       {/* <ContentHeader /> */}
-      <Card title={title}/>
+      <Card title={title} onLogin={onLogin} user={user}/>
     </div>
   );
 };

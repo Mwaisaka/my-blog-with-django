@@ -40,8 +40,9 @@ import AddPosts from "../../Blogs/AddBlog";
 import SubscribersList from "./SubscribersList";
 import ManageBlogs from "../../Blogs/ManageBlogs";
 import Messages from "../../Contacts/Messages";
+import Profile from "./Profile";
 
-const Card = ({ title }) => {
+const Card = ({ title, onLogin, user }) => {
   const { path } = useParams(); // Get the current path
 
   switch (title) {
@@ -55,6 +56,8 @@ const Card = ({ title }) => {
       return <Messages />;
     case "SubscribersList":
       return <SubscribersList />;
+    case "Profile":
+      return <Profile onLogin={onLogin} user={user}/>;
     default:
       return null; // Return null if no matching menu item found
   }

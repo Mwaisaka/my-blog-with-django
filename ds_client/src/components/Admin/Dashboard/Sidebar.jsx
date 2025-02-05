@@ -35,6 +35,7 @@ const Sidebar = ({ onLogout, onMenuItemClick }) => {
     if (confirmLogout) {
       // Proceed with logout
       onLogout();
+      alert("You have been logged out successfully");
       navigate("/");
     } else {
       // Do nothing and keep the user on the current page
@@ -48,7 +49,7 @@ const Sidebar = ({ onLogout, onMenuItemClick }) => {
   };
 
   return (
-    <div className="menu mt-9">
+    <div className="menu mt-5">
       {/* <div className="logo">
         <BiBookAlt className="logo-icon" />
         <h2>Dashboard Overview</h2>
@@ -101,6 +102,16 @@ const Sidebar = ({ onLogout, onMenuItemClick }) => {
         >
           <BiTask className="icon" />
           <span>Manage Messages</span>
+        </div>
+
+        <div
+          className={`item ${
+            activeMenuItem === "Profile" ? "active" : ""
+          }`}
+          onClick={() => handleClick("Profile")}
+        >
+          <BiTask className="icon" />
+          <span>View Profile</span>
         </div>
 
         <a href="#" className="item">
